@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "tYNPfNRTOam+qCu5n0on+0mSGl1aQ3CBn6FVLW6CC30=",
+  "Source": "AuthSandbox.Api",
+  "BasePath": "_content/AuthSandbox.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
