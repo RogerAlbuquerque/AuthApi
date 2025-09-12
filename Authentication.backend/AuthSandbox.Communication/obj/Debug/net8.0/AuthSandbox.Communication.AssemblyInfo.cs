@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AuthSandbox.Communication")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10aaced6f7c30ea929dd339e963acbb51cda6339")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4808c33a4624eb505d1308159b9dec57e0cad7df")]
 [assembly: System.Reflection.AssemblyProductAttribute("AuthSandbox.Communication")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AuthSandbox.Communication")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
