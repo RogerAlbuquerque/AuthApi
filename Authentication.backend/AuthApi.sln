@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{B9AFAD7D-E50F-4F42-BCEA-8F946A902998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSandbox.Api", "Src\AuthSandbox.Api\AuthSandbox.Api.csproj", "{B470F519-16AA-484E-8EFA-B6250B460F32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSandbox.Application", "Src\AuthSandbox.Application\AuthSandbox.Application.csproj", "{805740AB-7AB1-45F7-95C1-ADA80537F419}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSandbox.Communication", "Src\AuthSandbox.Communication\AuthSandbox.Communication.csproj", "{EB596C21-A2C0-4F5F-AF08-22B25D17FB09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSandbox.Domain", "Src\AuthSandbox.Domain\AuthSandbox.Domain.csproj", "{1087CE0E-3015-4D6F-B315-8F7650DD083A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSandbox.Exception", "Src\AuthSandbox.Exception\AuthSandbox.Exception.csproj", "{A092D271-FE0A-4EE2-924F-CE4886B88938}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthSandbox.Infrastructure", "Src\AuthSandbox.Infrastructure\AuthSandbox.Infrastructure.csproj", "{AE186AA9-AB07-4AB0-A563-1DBF4E01B42E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B470F519-16AA-484E-8EFA-B6250B460F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B470F519-16AA-484E-8EFA-B6250B460F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B470F519-16AA-484E-8EFA-B6250B460F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B470F519-16AA-484E-8EFA-B6250B460F32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{805740AB-7AB1-45F7-95C1-ADA80537F419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{805740AB-7AB1-45F7-95C1-ADA80537F419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{805740AB-7AB1-45F7-95C1-ADA80537F419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{805740AB-7AB1-45F7-95C1-ADA80537F419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB596C21-A2C0-4F5F-AF08-22B25D17FB09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB596C21-A2C0-4F5F-AF08-22B25D17FB09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB596C21-A2C0-4F5F-AF08-22B25D17FB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB596C21-A2C0-4F5F-AF08-22B25D17FB09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1087CE0E-3015-4D6F-B315-8F7650DD083A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1087CE0E-3015-4D6F-B315-8F7650DD083A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1087CE0E-3015-4D6F-B315-8F7650DD083A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1087CE0E-3015-4D6F-B315-8F7650DD083A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A092D271-FE0A-4EE2-924F-CE4886B88938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A092D271-FE0A-4EE2-924F-CE4886B88938}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A092D271-FE0A-4EE2-924F-CE4886B88938}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A092D271-FE0A-4EE2-924F-CE4886B88938}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE186AA9-AB07-4AB0-A563-1DBF4E01B42E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE186AA9-AB07-4AB0-A563-1DBF4E01B42E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE186AA9-AB07-4AB0-A563-1DBF4E01B42E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE186AA9-AB07-4AB0-A563-1DBF4E01B42E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B470F519-16AA-484E-8EFA-B6250B460F32} = {B9AFAD7D-E50F-4F42-BCEA-8F946A902998}
+		{805740AB-7AB1-45F7-95C1-ADA80537F419} = {B9AFAD7D-E50F-4F42-BCEA-8F946A902998}
+		{EB596C21-A2C0-4F5F-AF08-22B25D17FB09} = {B9AFAD7D-E50F-4F42-BCEA-8F946A902998}
+		{1087CE0E-3015-4D6F-B315-8F7650DD083A} = {B9AFAD7D-E50F-4F42-BCEA-8F946A902998}
+		{A092D271-FE0A-4EE2-924F-CE4886B88938} = {B9AFAD7D-E50F-4F42-BCEA-8F946A902998}
+		{AE186AA9-AB07-4AB0-A563-1DBF4E01B42E} = {B9AFAD7D-E50F-4F42-BCEA-8F946A902998}
+	EndGlobalSection
+EndGlobal
