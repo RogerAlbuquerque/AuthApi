@@ -30,7 +30,35 @@ public class UserTests
     {
 
         var exception = Assert.Throws<ArgumentException>(() => new User(invalidEmail, "abcde12345"));
-        
+        // Console.WriteLine("===========================================================================");
+        // Console.WriteLine(exception);
+        // Console.WriteLine("===========================================================================");
         Assert.Contains("email", exception.Message);
+    }
+
+    [Fact]
+    public void Should_Return_True_When_PasswordHash_Matches()
+    {
+        // Arrange
+        var user = new User("test@email.com", "hashed123");
+
+        // Act
+        var result = user.VerifyPassword("hashed123");
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Should_Return_False_When_PasswordHash_Does_Not_Match()
+    {
+        // Arrange
+        var user = new User("test@email.com", "hashed123");
+
+        // Act
+        var result = user.VerifyPassword("wrongHash");
+
+        // Assert
+        Assert.False(result);
     }
 }

@@ -11,12 +11,17 @@ public sealed class User
         if (string.IsNullOrEmpty(email))
             throw new ArgumentException("Email is required and cannot be empty or whitespace.", nameof(email));
         if (!email.Contains("@"))
-            throw new ArgumentException("Email is invalid", nameof(email));            
+            throw new ArgumentException("Email is invalid", nameof(email));
         if (string.IsNullOrEmpty(passwordHash))
             throw new ArgumentException("Password cannot be empty or whitespace.", nameof(passwordHash));
 
         Email = email;
         PasswordHash = passwordHash;
         CreatedAt = DateTime.UtcNow;
+    }
+    
+     public bool VerifyPassword(string passwordHashToCheck)
+    {
+        return PasswordHash == passwordHashToCheck;
     }
 }
