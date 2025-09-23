@@ -16,7 +16,7 @@ public class AuthController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Login()
     {
-        string res = await _clientService.ClientLogin();
+        IEnumerable<User> res = await _clientService.ClientLogin();
         return Ok(res);
     }
 }

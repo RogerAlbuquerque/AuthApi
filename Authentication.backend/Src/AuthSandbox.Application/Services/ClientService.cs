@@ -9,9 +9,9 @@ public class ClientService : IClientService
     {
         _clientRepository = clientRepository;
     }
-    public async Task<string> ClientLogin()
+    public async Task<IEnumerable<User>> ClientLogin()
     {
-        string res = await _clientRepository.ClientAuthentication();
+        var res = await _clientRepository.ClientAuthentication();
         return res;
     }
 

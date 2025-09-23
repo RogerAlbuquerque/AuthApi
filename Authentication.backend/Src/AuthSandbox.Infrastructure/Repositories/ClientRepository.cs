@@ -1,12 +1,22 @@
 // using AuthSandbox.Domain.Interfaces;
 
+using AuthSandbox.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
+
 namespace AuthSandbox.Infrastructure.Repositories;
 
 public class ClientRepository : IClientRepository
 {
-    public async Task<string> ClientAuthentication()
+    private readonly AppDbContext _context;
+
+    public ClientRepository(AppDbContext context)
     {
-        await Task.Delay(2000);
-        return "Client Repository is working!";
+        _context = context;
+    }
+    public async Task<IEnumerable<User>> ClientAuthentication()
+    {
+
+        return await _context.Users.ToListAsync();
+        
     }
 }

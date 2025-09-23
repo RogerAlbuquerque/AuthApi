@@ -1,4 +1,4 @@
 public interface IClientRepository
 {
-    Task<string> ClientAuthentication();  
+    Task<IEnumerable<User>> ClientAuthentication();  
 }
