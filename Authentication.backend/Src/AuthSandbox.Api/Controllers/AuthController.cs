@@ -1,13 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
+using AuthSandbox.Application.Interfaces;
 namespace AuthSandbox.Api.Controllers;
 
-[Route("auth/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> Get()
+    private readonly IClientService _clientService;
+
+    public AuthController(IClientService clientService)
     {
-        return Ok("Auth Controller is working!");
+       _clientService = clientService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Login()
+    {
+        string res = await _clientService.ClientLogin();
+        return Ok(res);
     }
 }
