@@ -13,10 +13,15 @@ public class ClientRepository : IClientRepository
     {
         _context = context;
     }
-    public async Task<IEnumerable<User>> ClientAuthentication()
+    public async Task<IEnumerable<User>> Authentication()
     {
 
         return await _context.Users.ToListAsync();
         
+    }
+
+    public Task<User> Register()
+    {
+        throw new NotImplementedException();
     }
 }

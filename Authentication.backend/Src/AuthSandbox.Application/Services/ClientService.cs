@@ -11,7 +11,7 @@ public class ClientService : IClientService
     }
     public async Task<IEnumerable<User>> ClientLogin()
     {
-        var res = await _clientRepository.ClientAuthentication();
+        var res = await _clientRepository.Authentication();
         return res;
     }
 
