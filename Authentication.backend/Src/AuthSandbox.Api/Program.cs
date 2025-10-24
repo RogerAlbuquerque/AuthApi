@@ -30,6 +30,14 @@ builder.Services.AddCors(options =>
 });
 var app = builder.Build();
 
+var google = builder.Configuration.GetSection("Authentication:Google");
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        options.ClientId = google["ClientId"];
+        options.ClientSecret = google["ClientSecret"];
+        options.CallbackPath = "/signin-google";
+    });
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -39,6 +47,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
