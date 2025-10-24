@@ -22,7 +22,6 @@ public sealed class User
         Email = email;
         PasswordHash = passwordHash;
         CreatedAt = DateTime.UtcNow;
-        Console.WriteLine("Terceiro: " + Username);
     }
 
     public bool VerifyPassword(string passwordHashToCheck)

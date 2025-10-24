@@ -20,9 +20,10 @@ public class ClientRepository : IClientRepository
         
     }
 
-    public async Task<string> Register(string name, string email, string password)
+    public async Task<User> Register(string name, string email, string password)
     {
-        return await Task.FromResult($"Registro recebido para: {name} com email {email} e password {password}");
+        User newUser = new User(name, email, password);
+        return newUser;
     }
 
 

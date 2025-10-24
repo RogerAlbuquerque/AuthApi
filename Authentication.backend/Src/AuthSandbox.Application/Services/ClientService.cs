@@ -15,9 +15,9 @@ public class ClientService : IClientService
         return res;
     }
 
-    public async Task<string> ClientRegister(string name, string email, string password)
+    public async Task<User> ClientRegister(string name, string email, string password)
     {
-        string res = await _clientRepository.Register(name, email, password);
+        User res = await _clientRepository.Register(name, email, password);
         return res;
     }
 }
