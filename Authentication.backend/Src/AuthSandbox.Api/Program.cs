@@ -28,16 +28,20 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-var app = builder.Build();
 
 var google = builder.Configuration.GetSection("Authentication:Google");
 builder.Services.AddAuthentication()
+    .AddCookie()
     .AddGoogle(options =>
     {
-        options.ClientId = google["ClientId"];
-        options.ClientSecret = google["ClientSecret"];
+        options.ClientId = google["ClientId"]!;
+        options.ClientSecret = google["ClientSecret"]!;
         options.CallbackPath = "/signin-google";
     });
+
+var app = builder.Build();
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
