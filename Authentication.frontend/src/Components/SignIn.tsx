@@ -14,17 +14,40 @@ function SignInForm() {
         });
     };
 
-    const handleOnSubmit = (evt: { preventDefault: () => void; }) => {
+    const handleOnSubmit = async (evt: { preventDefault: () => void; }) => {
         evt.preventDefault();
 
         const { email, password } = state;
 
-        if(email === "teste@gmail.com" && password === "1234") {
-           alert(`You are login with email: ${email} and password: ${password}`);
-            return;
-        }
-        else{
-            alert("Wrong email or password");
+        // if(email === "teste@gmail.com" && password === "1234") {
+        //    alert(`You are login with email: ${email} and password: ${password}`);
+        //     return;
+        // }
+        // else{
+        //     alert("Wrong email or password");
+        // }
+        try {
+            const response = await fetch('http://localhost:5005/Auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert('Login successful!');
+                // You can store the token here if the API returns one
+                // localStorage.setItem('token', data.token);
+                console.log('Response data:', data);
+            } else {
+                alert('Invalid credentials');
+                console.log(response.status);
+            }
+        } catch (error) {
+            alert('Error connecting to the server');
+            console.error('Error:', error);
         }
 
         for (const key in state) {

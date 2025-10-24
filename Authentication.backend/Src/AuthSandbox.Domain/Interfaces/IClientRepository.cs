@@ -1,5 +1,5 @@
 public interface IClientRepository
 {
     Task<IEnumerable<User>> Authentication();  
-    Task<User> Register();  
+    Task<string> Register(string name, string email, string password);  
 }

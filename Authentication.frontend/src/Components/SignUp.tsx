@@ -14,14 +14,34 @@ function SignUpForm() {
         });
     };
 
-    const handleOnSubmit = (evt: { preventDefault: () => void; }) => {
+    const handleOnSubmit = async (evt: { preventDefault: () => void; }) => {
         evt.preventDefault();
 
-        const { name, email, password } = state;
-        alert(
-            `You are sign up with name: ${name} email: ${email} and password: ${password}`
-        );
-
+        const requestData = {
+            Username: state.name,
+            Email: state.email,
+            PasswordHash: state.password
+        };
+        try {
+            const response = await fetch('http://localhost:5005/Auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            });
+            console.log(response)
+            if (response.ok) {
+                const data = await response.json();
+                alert('Sign-in successful!');
+                console.log('Response data:', data);
+            } else {
+                alert('Invalid credentials');
+                console.log(response.status);
+            }
+        } catch (error) {
+            alert('Error connecting to the server');
+        }
         for (const key in state) {
             setState({
                 ...state,
