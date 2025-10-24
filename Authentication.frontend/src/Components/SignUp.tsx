@@ -17,20 +17,18 @@ function SignUpForm() {
     const handleOnSubmit = async (evt: { preventDefault: () => void; }) => {
         evt.preventDefault();
 
-        const requestData = {
-            Username: state.name,
-            Email: state.email,
-            PasswordHash: state.password
-        };
         try {
             const response = await fetch('http://localhost:5005/Auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(requestData)
+                body: JSON.stringify({
+                    Username: state.name,
+                    Email: state.email,
+                    PasswordHash: state.password
+                })
             });
-            console.log(response)
             if (response.ok) {
                 const data = await response.json();
                 alert('Sign-in successful!');
@@ -41,6 +39,7 @@ function SignUpForm() {
             }
         } catch (error) {
             alert('Error connecting to the server');
+            console.error('Error:', error);
         }
         for (const key in state) {
             setState({

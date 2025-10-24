@@ -3,8 +3,8 @@ import { FaGoogle, FaLinkedinIn, FaFacebookF } from "react-icons/fa";
 import React from "react";
 function SignInForm() {
     const [state, setState] = React.useState({
-        email: "",
-        password: ""
+        Email: "",
+        PasswordHash: ""
     });
     const handleChange = (evt: { target: { value: any; name: any; }; }) => {
         const value = evt.target.value;
@@ -17,14 +17,14 @@ function SignInForm() {
     const handleOnSubmit = async (evt: { preventDefault: () => void; }) => {
         evt.preventDefault();
 
-        const { email, password } = state;
+        const { Email, PasswordHash } = state;
 
-        // if(email === "teste@gmail.com" && password === "1234") {
-        //    alert(`You are login with email: ${email} and password: ${password}`);
+        // if(Email === "teste@gmail.com" && PasswordHash === "1234") {
+        //    alert(`You are login with Email: ${Email} and PasswordHash: ${PasswordHash}`);
         //     return;
         // }
         // else{
-        //     alert("Wrong email or password");
+        //     alert("Wrong Email or PasswordHash");
         // }
         try {
             const response = await fetch('http://localhost:5005/Auth/login', {
@@ -32,7 +32,7 @@ function SignInForm() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ Email, PasswordHash })
             });
 
             if (response.ok) {
@@ -81,20 +81,20 @@ function SignInForm() {
                 </div>
                 <span>or use your account</span>
                 <input
-                    type="email"
+                    type="Email"
                     placeholder="Email"
-                    name="email"
-                    value={state.email}
+                    name="Email"
+                    value={state.Email}
                     onChange={handleChange}
                 />
                 <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={state.password}
+                    type="PasswordHash"
+                    name="PasswordHash"
+                    placeholder="PasswordHash"
+                    value={state.PasswordHash}
                     onChange={handleChange}
                 />
-                <a href="#">Forgot your password?</a>
+                <a href="#">Forgot your PasswordHash?</a>
                 <button>Sign In</button>
             </form>
         </div>
