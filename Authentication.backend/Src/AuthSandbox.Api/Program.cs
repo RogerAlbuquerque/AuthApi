@@ -2,6 +2,8 @@ using AuthSandbox.Application.Interfaces;
 using AuthSandbox.Application.Services;
 using AuthSandbox.Infrastructure.Context;
 using AuthSandbox.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,16 +23,21 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:5173")
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
 var google = builder.Configuration.GetSection("Authentication:Google");
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
     .AddCookie()
     .AddGoogle(options =>
     {
@@ -48,7 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
