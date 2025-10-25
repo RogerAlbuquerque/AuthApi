@@ -22,8 +22,9 @@ public class AuthController : ControllerBase
     [HttpGet("login")]
     public async Task<IActionResult> Login()
     {
-        var redirectUrl = Url.Action("GoogleResponse", "Auth", new { ReturnUrl = "/" });
-        var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+        var redirectUrl = Url.Action("GoogleResponse", "Auth", new { nomeVar = "valorVarNaUrl" }); 
+        
+        var properties = new AuthenticationProperties { RedirectUri = redirectUrl }; //Define que, após o login no Google, o usuário deve ser redirecionado para redirectUrl
         return Challenge(properties, GoogleDefaults.AuthenticationScheme);
 
         // RedirectToActionResult
@@ -48,7 +49,7 @@ public class AuthController : ControllerBase
     [HttpGet("signin-google")]
     public async Task<IActionResult> GoogleResponse(string returnUrl = "/")
     {
-        var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme); // Autentica o usuário usando o esquema de cookies
 
         if (!result.Succeeded)
             return BadRequest(); // ou redirecionar para uma página de erro
@@ -60,5 +61,13 @@ public class AuthController : ControllerBase
 
         // Redireciona para o frontend ou retorna um token, se preferir
         return Ok(email);
+    }
+
+    
+    [HttpGet("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync();
+        return RedirectToAction("Home");
     }
 }
