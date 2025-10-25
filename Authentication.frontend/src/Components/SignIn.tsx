@@ -17,7 +17,7 @@ function SignInForm() {
     const handleOnSubmit = async (evt: { preventDefault: () => void; }) => {
         evt.preventDefault();
 
-        const { Email, PasswordHash } = state;
+        // const { Email, PasswordHash } = state;
 
         // if(Email === "teste@gmail.com" && PasswordHash === "1234") {
         //    alert(`You are login with Email: ${Email} and PasswordHash: ${PasswordHash}`);
@@ -27,24 +27,26 @@ function SignInForm() {
         //     alert("Wrong Email or PasswordHash");
         // }
         try {
-            const response = await fetch('http://localhost:5005/Auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ Email, PasswordHash })
-            });
+            window.location.href = "http://localhost:5005/Auth/login";
 
-            if (response.ok) {
-                const data = await response.json();
-                alert('Login successful!');
-                // You can store the token here if the API returns one
-                // localStorage.setItem('token', data.token);
-                console.log('Response data:', data);
-            } else {
-                alert('Invalid credentials');
-                console.log(response.status);
-            }
+            // const response = await fetch('http://localhost:5005/Auth/login', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({ Email, PasswordHash })
+            // });
+
+            // if (response.ok) {
+            //     const data = await response.json();
+            //     alert('Login successful!');
+            //     // You can store the token here if the API returns one
+            //     // localStorage.setItem('token', data.token);
+            //     console.log('Response data:', data);
+            // } else {
+            //     alert('Invalid credentials');
+            //     console.log(response.status);
+            // }
         } catch (error) {
             alert('Error connecting to the server');
             console.error('Error:', error);
