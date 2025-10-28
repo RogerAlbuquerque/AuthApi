@@ -2,8 +2,15 @@ import { useState, type SetStateAction } from "react";
 import "../Style/style.css";
 import SignUpForm from "../Components/SignUp";
 import SignInForm from "../Components/SignIn";
+import { useLocation } from "react-router";
+
 export default function LoginForm() {
   const [type, setType] = useState("signIn");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const loggedError = searchParams.get("login");
+
+
   const handleOnClick = (text: SetStateAction<string>) => {
     if (text !== type) {
       setType(text);
@@ -13,7 +20,8 @@ export default function LoginForm() {
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
   return (
-<div className="App">
+    <div className="App">
+      <p style={{color:"red", fontSize:"2em"}}>{loggedError == "false" && "Acesso negado login necessário"}</p>
       <h2>Sign in/up Form</h2>
       <div className={containerClass} id="container">
         <SignUpForm />

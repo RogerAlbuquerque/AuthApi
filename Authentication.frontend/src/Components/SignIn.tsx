@@ -1,6 +1,7 @@
 import { FaGoogle, FaLinkedinIn, FaFacebookF } from "react-icons/fa";
 
 import React from "react";
+
 function SignInForm() {
     const [state, setState] = React.useState({
         Email: "",
@@ -28,6 +29,8 @@ function SignInForm() {
         // }
         try {
             window.location.href = "http://localhost:5005/Auth/login";
+            // const popup = window.open("http://localhost:5005/Auth/login", "_blank", "width=500,height=600");
+            
 
             // const response = await fetch('http://localhost:5005/Auth/login', {
             //     method: 'POST',

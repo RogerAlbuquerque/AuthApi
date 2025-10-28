@@ -44,6 +44,13 @@ builder.Services.AddAuthentication(options =>
         options.ClientId = google["ClientId"]!;
         options.ClientSecret = google["ClientSecret"]!;
         options.CallbackPath = "/signin-google";
+
+        // options.Events.OnTicketReceived = ctx =>
+        // {
+        //     ctx.Response.Redirect("http://localhost:5173/");
+        //     ctx.HandleResponse();
+        //     return Task.CompletedTask;
+        // };
     });
 
 var app = builder.Build();

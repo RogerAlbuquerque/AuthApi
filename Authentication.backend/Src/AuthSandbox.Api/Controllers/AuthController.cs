@@ -22,8 +22,9 @@ public class AuthController : ControllerBase
     [HttpGet("login")]
     public async Task<IActionResult> Login()
     {
-        var redirectUrl = Url.Action("GoogleResponse", "Auth", new { nomeVar = "valorVarNaUrl" }); 
-        
+        // var redirectUrl = Url.Action("http://localhost:5173/home");
+        var redirectUrl = Url.Action("GoogleResponse", "Auth", new { nomeVar = "valorVarNaUrl" });
+
         var properties = new AuthenticationProperties { RedirectUri = redirectUrl }; //Define que, após o login no Google, o usuário deve ser redirecionado para redirectUrl
         return Challenge(properties, GoogleDefaults.AuthenticationScheme);
 
@@ -41,9 +42,17 @@ public class AuthController : ControllerBase
 
 
     [HttpGet("home")]
-    public IActionResult Home()
+    public async Task<IActionResult> Home()
     {
-        return Ok("Welcome to the AuthSandbox API!");
+        var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        if (!result.Succeeded)
+            return BadRequest(); // ou redirecionar para uma página de erro
+
+        // Aqui você pode acessar os dados do usuário autenticado
+        var claims = result.Principal.Identities.FirstOrDefault()?.Claims;
+        var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        return Ok(new { Email = email, Name = name });
     }
 
     [HttpGet("signin-google")]
@@ -59,11 +68,11 @@ public class AuthController : ControllerBase
         var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
         var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
-        // Redireciona para o frontend ou retorna um token, se preferir
-        return Ok(email);
+        return Redirect("http://localhost:5173/home");
+
     }
 
-    
+
     [HttpGet("logout")]
     public async Task<IActionResult> Logout()
     {
