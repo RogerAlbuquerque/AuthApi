@@ -44,15 +44,29 @@ public class AuthController : ControllerBase
     [HttpGet("home")]
     public async Task<IActionResult> Home()
     {
-        var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        if (!result.Succeeded)
-            return BadRequest(); // ou redirecionar para uma página de erro
+        try
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
+            {
+                Console.WriteLine("MORREU AQUI");
+                return BadRequest(); // ou redirecionar para uma página de erro
 
-        // Aqui você pode acessar os dados do usuário autenticado
-        var claims = result.Principal.Identities.FirstOrDefault()?.Claims;
-        var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-        return Ok(new { Email = email, Name = name });
+
+            }
+            Console.WriteLine("Passou aqui");
+            var claims = result.Principal.Identities.FirstOrDefault()?.Claims;
+            var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            Console.WriteLine("FINALIZOU");
+            return Ok(new { Email = email, Name = name });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+
     }
 
     [HttpGet("signin-google")]

@@ -23,13 +23,13 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 builder.Services.AddCors(options =>
 {
-     options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
-    });
+    options.AddPolicy("AllowFrontend", policy =>
+   {
+       policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+             .AllowAnyMethod()
+             .AllowAnyHeader()
+             .AllowCredentials();
+   });
 });
 
 var google = builder.Configuration.GetSection("Authentication:Google");
@@ -38,7 +38,12 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
-    .AddCookie()
+    .AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    })
     .AddGoogle(options =>
     {
         options.ClientId = google["ClientId"]!;

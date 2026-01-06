@@ -8,7 +8,7 @@ export default function App() {
         async function GetUser() {
             try {
    
-                const response = await fetch('http://localhost:5005/Auth/Home', {
+                const response = await fetch('https://localhost:60292/Auth/home', {
                     method: 'GET',
                     credentials: "include",
                     headers: {
@@ -19,10 +19,11 @@ export default function App() {
                 if (response.ok) {
                     const data = await response.json();
                     setUser(data);
-                    console.log(response.ok);
                 }
                 else {
                     navigate('/');
+                    console.log(User);
+                    
                     console.log(response.ok);
                     
                 }

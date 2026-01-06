@@ -18,7 +18,7 @@ function SignUpForm() {
         evt.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:5005/Auth/register', {
+            const response = await fetch('http://localhost:60292/Auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ function SignInForm() {
         //     alert("Wrong Email or PasswordHash");
         // }
         try {
-            window.location.href = "http://localhost:5005/Auth/login";
+            window.location.href = "https://localhost:60292/Auth/login";
             // const popup = window.open("http://localhost:5005/Auth/login", "_blank", "width=500,height=600");
             
 
@@ -65,7 +65,7 @@ function SignInForm() {
 
     return (
         <div className="form-container sign-in-container">
-            <form onSubmit={handleOnSubmit}>
+            <form onSubmit={()=> alert("Do it login with google on upside button")}>
                 <h1>Sign in</h1>
                 <div className="social-container">
                     <a href="#" className="social">
@@ -73,7 +73,7 @@ function SignInForm() {
                             <FaFacebookF />
                         </i>
                     </a>
-                    <a href="#" className="social">
+                    <a href="#" className="social" onClick={handleOnSubmit}>
                         <i className="fab fa-google-plus-g" >
                             <FaGoogle />
                         </i>
