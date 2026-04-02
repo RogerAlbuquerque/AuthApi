@@ -8,4 +8,4 @@ XUnit was be used to make unit tests with some parts of the application
 
 # Jest and React Test Library
 
-Both are used to test frontend components
+This two tools was used to make unit test on som parts in the frontend application
