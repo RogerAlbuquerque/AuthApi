@@ -1,45 +1,45 @@
 # AuthApi
 
-Microsserviço de autenticação com interface web, voltado a cadastro de usuários e login via Google OAuth. O repositório reúne uma API ASP.NET Core em camadas e um frontend React que consome essa API com cookies e CORS configurados para desenvolvimento local.
+Authentication microservice with a web interface focused on user registration and login via Google OAuth. The repository brings together a layered ASP.NET Core API and a React frontend that consumes this API with cookies and CORS configured for local development.
 
 ---
 
-## Visão geral
+## Overview
 
-O **AuthApi** (internamente organizado como **AuthSandbox**) é um projeto de referência para autenticação de usuários. A ideia central é oferecer um backend que possa ser reutilizado como serviço de identidade — com registro via API e login social pelo Google — e um frontend que demonstre o fluxo completo, incluindo persistência de sessão por cookie após o OAuth.
+**AuthApi** (internally organized as **AuthSandbox**) is a reference project for user authentication. The main idea is to provide a backend that can be reused as an identity service — with API registration and Google social login — and a frontend that demonstrates the complete flow, including session persistence via cookie after OAuth.
 
-O backend segue uma separação em camadas inspirada em **Clean Architecture**: domínio isolado, regras na camada de aplicação, persistência na infraestrutura e exposição HTTP na API. O frontend é uma SPA leve com formulários de login/cadastro e uma página protegida que valida a sessão no servidor.
+The backend follows a layered separation inspired by **Clean Architecture**: isolated domain, rules in the application layer, persistence in infrastructure, and HTTP exposure in the API. The frontend is a lightweight SPA with login/registration forms and a protected page that validates the session on the server.
 
 ---
 
-## Funcionalidades
+## Features
 
-| Área                    | Descrição                                                                                                                     |
+| Area                    | Description                                                                                                                     |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| **Cadastro**            | Endpoint `POST /Auth/register` recebe nome, e-mail e senha e cria a entidade `User` no domínio.                               |
-| **Login Google**        | Fluxo OAuth 2.0: o usuário é redirecionado ao Google, retorna com cookie de autenticação e é enviado ao frontend em `/home`.  |
-| **Sessão**              | Autenticação baseada em **cookies** (`CookieAuthentication`) com suporte a credenciais cross-origin (CORS + `SameSite=None`). |
-| **Página autenticada**  | `GET /Auth/home` lê as claims do cookie e devolve e-mail e nome do usuário logado.                                            |
-| **Logout**              | `GET /Auth/logout` encerra a sessão no servidor.                                                                              |
-| **Interface**           | Formulário animado (sign in / sign up), ícones sociais (apenas Google funcional) e roteamento com React Router.               |
-| **Documentação da API** | Swagger habilitado em ambiente de desenvolvimento.                                                                            |
-| **Testes**              | xUnit no domínio (`User`); Jest + React Testing Library no componente de login.                                               |
+| **Registration**        | Endpoint `POST /Auth/register` receives name, email, and password and creates the `User` entity in the domain.                 |
+| **Google Login**        | OAuth 2.0 flow: the user is redirected to Google, returns with an authentication cookie, and is sent to the frontend at `/home`. |
+| **Session**             | Cookie-based authentication (`CookieAuthentication`) with cross-origin credentials support (CORS + `SameSite=None`).             |
+| **Authenticated page**  | `GET /Auth/home` reads claims from the cookie and returns the logged-in user’s email and name.                                 |
+| **Logout**              | `GET /Auth/logout` ends the session on the server.                                                                            |
+| **Interface**           | Animated form (sign in / sign up), social icons (only Google functional), and routing with React Router.                       |
+| **API documentation**   | Swagger enabled in development environment.                                                                                     |
+| **Tests**               | xUnit in the domain (`User`); Jest + React Testing Library in the login component.                                             |
 
-> **Nota:** Login por e-mail/senha está parcialmente modelado no domínio e nos serviços, mas o fluxo ativo na UI hoje é o login via Google.
+> **Note:** Email/password login is partially modeled in the domain and services, but the active UI flow today is login via Google.
 
 ---
 
-## Arquitetura
+## Architecture
 
-### Padrões e princípios
+### Patterns and principles
 
-- **Arquitetura em camadas** com dependências apontando para o domínio.
-- **Injeção de dependência** no `Program.cs` (`IClientService` / `IClientRepository`).
-- **Repository pattern** para abstrair acesso a dados (`IClientRepository` → `ClientRepository`).
-- **Entidade rica** em `User`, com validações no construtor e método `VerifyPassword`.
-- **DTOs de entrada** (`UserRegister`, `UserLogin`) separados da entidade de domínio.
+- **Layered architecture** with dependencies pointing toward the domain.
+- **Dependency injection** in `Program.cs` (`IClientService` / `IClientRepository`).
+- **Repository pattern** to abstract data access (`IClientRepository` → `ClientRepository`).
+- **Rich entity** in `User`, with validations in the constructor and `VerifyPassword` method.
+- **Input DTOs** (`UserRegister`, `UserLogin`) separated from the domain entity.
 
-### Diagrama de alto nível
+### High-level diagram
 
 ```mermaid
 flowchart TB
@@ -70,27 +70,27 @@ flowchart TB
     UI -->|HTTP + cookies| AC
     AC --> CS
     CS --> IR
-    CR -.->|implementa| IR
+    CR -.->|implements| IR
     CR --> DB
     AC <-->|Challenge / Callback| Google
 ```
 
-### Camadas do backend
+### Backend layers
 
-| Projeto                      | Responsabilidade                                                                  |
+| Project                      | Responsibility                                                                    |
 | ---------------------------- | --------------------------------------------------------------------------------- |
-| `AuthSandbox.Api`            | Host HTTP, controllers, CORS, autenticação Google/Cookie, Swagger.                |
-| `AuthSandbox.Application`    | Casos de uso (`ClientRegister`, `ClientLogin`).                                   |
-| `AuthSandbox.Domain`         | Entidades, contratos de repositório, regras de validação.                         |
-| `AuthSandbox.Infrastructure` | `AppDbContext`, migrations EF Core, implementação do repositório.                 |
-| `AuthSandbox.Communication`  | Projeto reservado (sem código ainda) — típico para DTOs/contratos de API.         |
-| `AuthSandbox.Exception`      | Projeto reservado (sem código ainda) — típico para exceções de domínio/aplicação. |
+| `AuthSandbox.Api`            | HTTP host, controllers, CORS, Google/Cookie authentication, Swagger.             |
+| `AuthSandbox.Application`    | Use cases (`ClientRegister`, `ClientLogin`).                                     |
+| `AuthSandbox.Domain`         | Entities, repository contracts, validation rules.                                |
+| `AuthSandbox.Infrastructure` | `AppDbContext`, EF Core migrations, repository implementation.                   |
+| `AuthSandbox.Communication`  | Reserved project (no code yet) — typical for API DTOs/contracts.                  |
+| `AuthSandbox.Exception`      | Reserved project (no code yet) — typical for domain/application exceptions.       |
 
-A solução `AuthApi.sln` referencia os projetos de produção e o projeto de testes de domínio. Outros projetos de teste existem na pasta `tests/Unit`, mas ainda não estão integrados à solution pois não estão finalizados ainda.
+The `AuthApi.sln` solution references the production projects and the domain test project. Other test projects exist under `tests/Unit`, but they are not yet integrated into the solution because they are still unfinished.
 
 ---
 
-## Estrutura do repositório
+## Repository structure
 
 ```
 AuthApi/
@@ -99,10 +99,10 @@ AuthApi/
 ├── Authentication.backend/
 │   ├── AuthApi.sln
 │   ├── Src/
-│   │   ├── AuthSandbox.Api/           # API REST e Program.cs
-│   │   ├── AuthSandbox.Application/   # Serviços de aplicação
-│   │   ├── AuthSandbox.Domain/        # Entidades e interfaces
-│   │   ├── AuthSandbox.Infrastructure/# EF Core, repositórios, migrations
+│   │   ├── AuthSandbox.Api/           # REST API and Program.cs
+│   │   ├── AuthSandbox.Application/   # Application services
+│   │   ├── AuthSandbox.Domain/        # Entities and interfaces
+│   │   ├── AuthSandbox.Infrastructure/# EF Core, repositories, migrations
 │   │   ├── AuthSandbox.Communication/ # (scaffold)
 │   │   └── AuthSandbox.Exception/     # (scaffold)
 │   └── tests/
@@ -117,14 +117,14 @@ AuthApi/
     │   ├── Style/
     │   ├── App.tsx
     │   ├── Home.tsx
-    │   └── main.tsx       # Rotas: / e /home
+    │   └── main.tsx       # Routes: / and /home
     ├── package.json
     └── vite.config.ts
 ```
 
 ---
 
-## Tecnologias
+## Technologies
 
 ### Backend
 
@@ -133,7 +133,7 @@ AuthApi/
 - **Microsoft.AspNetCore.Authentication.Google** (OAuth 2.0)
 - **Cookie Authentication**
 - **Swashbuckle** (Swagger/OpenAPI)
-- **xUnit** (testes de domínio)
+- **xUnit** (domain tests)
 
 ### Frontend
 
@@ -141,65 +141,65 @@ AuthApi/
 - **Vite 7**
 - **React Router 7**
 - **Jest** + **Testing Library** + **jsdom**
-- **react-icons**, **styled-components** (dependências presentes; UI principal usa CSS customizado)
+- **react-icons**, **styled-components** (dependencies present; main UI uses custom CSS)
 
 ---
 
-## Fluxo do sistema
+## System flow
 
-### 1. Cadastro (sign up)
+### 1. Registration (sign up)
 
-1. O usuário preenche nome, e-mail e senha no formulário de cadastro.
-2. O frontend envia `POST /Auth/register` com JSON `{ Username, Email, PasswordHash }`.
-3. `AuthController` delega a `ClientService.ClientRegister`.
-4. `ClientRepository.Register` instancia `User` com validações de domínio.
+1. The user fills in name, email, and password in the registration form.
+2. The frontend sends `POST /Auth/register` with JSON `{ Username, Email, PasswordHash }`.
+3. `AuthController` delegates to `ClientService.ClientRegister`.
+4. `ClientRepository.Register` instantiates `User` with domain validations.
 
-### 2. Login com Google
+### 2. Google login
 
-1. O usuário <span style="color:red">clica no ícone do Google</span> (ou fluxo equivalente) em **Sign In**.
-2. O navegador navega para `GET /Auth/login` na API.
-3. A API dispara `Challenge` com esquema Google; após autenticação, o callback processa o ticket e grava o cookie.
-4. O endpoint `GoogleResponse` redireciona para `http://localhost:5173/home`.
-5. A página **Home** chama `GET /Auth/home` com `credentials: "include"`, obtém nome e e-mail das claims e exibe na tela.
-6. Se a sessão for inválida, o usuário volta para `/` com query `?login=false`.
+1. The user <span style="color:red">clicks the Google icon</span> (or equivalent flow) in **Sign In**.
+2. The browser navigates to `GET /Auth/login` on the API.
+3. The API triggers `Challenge` with the Google scheme; after authentication, the callback processes the ticket and writes the cookie.
+4. The `GoogleResponse` endpoint redirects to `http://localhost:5173/home`.
+5. The **Home** page calls `GET /Auth/home` with `credentials: "include"`, obtains name and email from the claims, and displays them.
+6. If the session is invalid, the user returns to `/` with query `?login=false`.
 
 ### 3. Logout
 
-- `GET /Auth/logout` chama `SignOutAsync` e redireciona (comportamento atual aponta para action `Home` no controller).
+- `GET /Auth/logout` calls `SignOutAsync` and redirects (current behavior points to the `Home` action in the controller).
 
 ---
 
-## API REST
+## REST API
 
-Base sugerida em desenvolvimento: `https://localhost:<porta-da-api>/` (a porta depende do `launchSettings.json`, localmente frequentemente **60292** ou **5005** — alinhe com o frontend).
+Suggested development base: `https://localhost:<api-port>/` (the port depends on `launchSettings.json`; locally often **60292** or **5005** — align with the frontend).
 
-| Método | Rota                  | Descrição                                         |
+| Method | Route                  | Description                                         |
 | ------ | --------------------- | ------------------------------------------------- |
-| `GET`  | `/Auth/login`         | Inicia fluxo OAuth Google.                        |
-| `GET`  | `/Auth/signin-google` | Callback pós-Google; redireciona ao frontend.     |
-| `GET`  | `/Auth/home`          | Retorna `{ Email, Name }` se o cookie for válido. |
-| `GET`  | `/Auth/logout`        | Encerra sessão.                                   |
-| `POST` | `/Auth/register`      | Cadastra usuário (body: `UserRegister`).          |
+| `GET`  | `/Auth/login`         | Starts the Google OAuth flow.                       |
+| `GET`  | `/Auth/signin-google` | Google callback; redirects to the frontend.         |
+| `GET`  | `/Auth/home`          | Returns `{ Email, Name }` if the cookie is valid.   |
+| `GET`  | `/Auth/logout`        | Ends the session.                                   |
+| `POST` | `/Auth/register`      | Registers a user (body: `UserRegister`).            |
 
-Em desenvolvimento, acesse `/swagger` para explorar os endpoints interativamente.
+In development, visit `/swagger` to explore the endpoints interactively.
 
 ---
 
-## Pré-requisitos
+## Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [Node.js](https://nodejs.org/) 18+ (recomendado LTS)
-- **SQL Server** (LocalDB, Express ou instância completa)
-- Conta no [Google Cloud Console](https://console.cloud.google.com/) com OAuth 2.0 configurado (Client ID e Client Secret)
-- HTTPS de desenvolvimento confiável no .NET (`dotnet dev-certs https --trust`)
+- [Node.js](https://nodejs.org/) 18+ (recommended LTS)
+- **SQL Server** (LocalDB, Express, or full instance)
+- Account in [Google Cloud Console](https://console.cloud.google.com/) with OAuth 2.0 configured (Client ID and Client Secret)
+- Trusted development HTTPS in .NET (`dotnet dev-certs https --trust`)
 
 ---
 
-## Configuração
+## Configuration
 
-Os arquivos `appsettings.json` e `launchSettings.json` estão no `.gitignore`. Crie-os localmente na pasta `Authentication.backend/Src/AuthSandbox.Api/`.
+The files `appsettings.json` and `launchSettings.json` are in `.gitignore`. Create them locally in `Authentication.backend/Src/AuthSandbox.Api/`.
 
-### `appsettings.json` (exemplo)
+### `appsettings.json` (example)
 
 ```json
 {
@@ -224,45 +224,45 @@ Os arquivos `appsettings.json` e `launchSettings.json` estão no `.gitignore`. C
 
 ### Google OAuth
 
-No Google Cloud Console, configure:
+In Google Cloud Console, configure:
 
-- **Authorized redirect URIs:** `https://localhost:<porta>/signin-google`
-- Origens JavaScript autorizadas, se aplicável ao seu ambiente.
+- **Authorized redirect URIs:** `https://localhost:<port>/signin-google`
+- JavaScript authorized origins, if applicable to your environment.
 
 ### CORS
 
-A API aceita origens `http://localhost:5173` e `https://localhost:5173` com credenciais. O frontend Vite usa por padrão a porta **5173**.
+The API accepts origins `http://localhost:5173` and `https://localhost:5173` with credentials. The Vite frontend uses port **5173** by default.
 
-### Alinhar URLs no frontend
+### Align URLs in the frontend
 
-Verifique e unifique as URLs da API em:
+Check and unify the API URLs in:
 
-- `SignUp.tsx` — registro
-- `SignIn.tsx` — redirect do login Google
-- `Home.tsx` — validação de sessão
+- `SignUp.tsx` — registration
+- `SignIn.tsx` — Google login redirect
+- `Home.tsx` — session validation
 
-Hoje o código mistura `http` e `https` e portas diferentes; use a mesma base URL da API em todos os pontos.
+Today the code mixes `http` and `https` and different ports; use the same API base URL in all places.
 
 ---
 
-## Instalação e execução
+## Installation and execution
 
 ### Backend
 
 ```bash
 cd Authentication.backend/Src/AuthSandbox.Api
 
-# Restaurar dependências (a partir da solution também funciona)
+# Restore dependencies (from the solution also works)
 dotnet restore ../../AuthApi.sln
 
-# Aplicar migrations no banco
+# Apply migrations to the database
 dotnet ef database update --project ../AuthSandbox.Infrastructure
 
-# Executar a API
+# Run the API
 dotnet run
 ```
 
-A API sobe com Swagger em modo Development. Anote a URL HTTPS exibida no terminal.
+The API starts with Swagger in Development mode. Note the HTTPS URL shown in the terminal.
 
 ### Frontend
 
@@ -273,23 +273,23 @@ npm install
 npm run dev
 ```
 
-Acesse `http://localhost:5173`. Para build de produção:
+Open `http://localhost:5173`. For production build:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-### Ordem recomendada
+### Recommended order
 
-1. Subir SQL Server / LocalDB.
-2. Configurar `appsettings.json` e credenciais Google.
-3. Rodar migrations e iniciar a API.
-4. Iniciar o frontend e testar cadastro + login Google.
+1. Start SQL Server / LocalDB.
+2. Configure `appsettings.json` and Google credentials.
+3. Run migrations and start the API.
+4. Start the frontend and test registration + Google login.
 
 ---
 
-## Testes
+## Tests
 
 ### Backend (xUnit)
 
@@ -298,7 +298,7 @@ cd Authentication.backend
 dotnet test tests/Unit/AuthApi.Domain.Tests
 ```
 
-Cobertura atual focada na entidade `User`: criação válida, e-mail inválido e verificação de senha.
+Current coverage focuses on the `User` entity: valid creation, invalid email, and password verification.
 
 ### Frontend (Jest)
 
@@ -307,13 +307,13 @@ cd Authentication.frontend
 npm test
 ```
 
-Testes do `Loginform`: estado inicial, alternância entre painéis Sign In e Sign Up.
+`Loginform` tests: initial state, switching between Sign In and Sign Up panels.
 
 ---
 
-## Exemplos de uso
+## Usage examples
 
-### Cadastro via curl
+### Registration via curl
 
 ```bash
 curl -X POST "https://localhost:60292/Auth/register" \
@@ -321,7 +321,7 @@ curl -X POST "https://localhost:60292/Auth/register" \
   -d "{\"Username\":\"Ana\",\"Email\":\"ana@exemplo.com\",\"PasswordHash\":\"senhaSegura123\"}"
 ```
 
-### Verificar sessão após login Google (navegador ou curl com cookie)
+### Verify session after Google login (browser or curl with cookie)
 
 ```bash
 curl -X GET "https://localhost:60292/Auth/home" \
@@ -329,55 +329,55 @@ curl -X GET "https://localhost:60292/Auth/home" \
   --cookie "cookies.txt"
 ```
 
-No navegador, após o fluxo OAuth, a página `/home` do frontend faz essa chamada automaticamente com `credentials: "include"`.
+In the browser, after the OAuth flow, the frontend `/home` page makes this call automatically with `credentials: "include"`.
 
-### Iniciar login Google
+### Start Google login
 
-Abra no navegador:
+Open in the browser:
 
 ```
 https://localhost:60292/Auth/login
 ```
 
-Ou use o botão Google na tela de Sign In, que redireciona para o mesmo endpoint.
+Or use the Google button on the Sign In screen, which redirects to the same endpoint.
 
 ---
 
-## Observações técnicas e melhorias que ainda vão ser feitas
+## Technical notes and improvements still to be made
 
-### Arquitetura e código
+### Architecture and code
 
-1. **Persistência no cadastro** — `ClientRepository.Register` cria `User` em memória, mas não chama `_context.Users.Add` nem `SaveChangesAsync`. O cadastro não grava no banco até isso ser implementado.
-2. **Hash de senha** — O campo se chama `PasswordHash`, porém o valor é armazenado em texto plano. Recomenda-se BCrypt, Argon2 ou `PasswordHasher<T>` do ASP.NET Identity.
-3. **`User.Id`** — O identificador é definido como `public Guid Id { get; } = new Guid();`, o que gera um novo GUID a cada leitura da propriedade. Eu vou botar para atribuir o ID uma única vez no construtor.
-4. **Deserialização JSON** — `UserRegister` e `UserLogin` usam setters privados e construtores parametrizados; o model binder do ASP.NET Core pode falhar ao deserializar o body. Vou mudar para records/DTOs públicos ou `[JsonConstructor]`.
-5. **Projetos vazios** — `AuthSandbox.Communication` e `AuthSandbox.Exception` estão na solution sem implementação, ainda vou colocar os jsons e erros nesses projetos
-6. **Login e-mail/senha** — `ClientLogin` e `Authentication()` no repositório não filtram por credenciais (retornam todos os usuários). O endpoint de login por senha não está exposto; código comentado no frontend e no controller é porque o trabalho está  em andamento ainda.
-7. **Testes desatualizados** — `UserTests` usa construtor `User(email, password)` com dois argumentos, enquanto a entidade exige `(username, email, passwordHash)`. Ajustar testes e incluir os demais projetos de teste na solution.
-8. **Consistência de URLs** — Unificar esquema (`https`), host e porta entre `SignUp`, `SignIn` e `Home`.
-9. **Redirecionamentos e logout** — `Logout` usa `RedirectToAction("Home")`; `GoogleResponse` redireciona com URL fixa. Extrair URLs do frontend para configuração (`appsettings` / variáveis de ambiente).
-10. **Segurança em produção** — Revisar `SameSite=None` + `SecurePolicy.Always`, políticas CORS restritas, secrets em variáveis de ambiente e template `appsettings.Development.json` versionado sem segredos.
+1. **Persistence on registration** — `ClientRepository.Register` creates `User` in memory but does not call `_context.Users.Add` or `SaveChangesAsync`. The registration does not persist to the database until this is implemented.
+2. **Password hashing** — The field is named `PasswordHash`, but the value is stored in plain text. BCrypt, Argon2, or ASP.NET Identity `PasswordHasher<T>` is recommended.
+3. **`User.Id`** — The identifier is defined as `public Guid Id { get; } = new Guid();`, which generates a new GUID on every property read. I will change it to assign the ID once in the constructor.
+4. **JSON deserialization** — `UserRegister` and `UserLogin` use private setters and parameterized constructors; ASP.NET Core model binding may fail to deserialize the body. I will change them to public records/DTOs or use `[JsonConstructor]`.
+5. **Empty projects** — `AuthSandbox.Communication` and `AuthSandbox.Exception` are in the solution without implementation; I will add JSONs and errors to those projects.
+6. **Email/password login** — `ClientLogin` and `Authentication()` in the repository do not filter by credentials (they return all users). The password login endpoint is not exposed; commented code in the frontend and controller exists because the work is still in progress.
+7. **Outdated tests** — `UserTests` uses `User(email, password)` with two arguments, while the entity requires `(username, email, passwordHash)`. Update tests and include the other test projects in the solution.
+8. **URL consistency** — Unify scheme (`https`), host, and port between `SignUp`, `SignIn`, and `Home`.
+9. **Redirects and logout** — `Logout` uses `RedirectToAction("Home")`; `GoogleResponse` redirects with a fixed URL. Extract frontend URLs to configuration (`appsettings` / environment variables).
+10. **Production security** — Review `SameSite=None` + `SecurePolicy.Always`, restrictive CORS policies, secrets in environment variables, and a versioned `appsettings.Development.json` template without secrets.
 
 ### Frontend
 
-- Botões Facebook e LinkedIn são apenas visuais por enquanto.
-- O formulário de Sign In por e-mail/senha exibe alerta pedindo uso do Google; o submit não autentica por credenciais locais.
+- Facebook and LinkedIn buttons are only visual for now.
+- The Sign In email/password form shows an alert asking to use Google; the submit does not authenticate with local credentials.
 
-### Banco de dados
+### Database
 
-A migration `InitialCreate` cria a tabela `Users` com `Id`, `Username`, `Email`, `PasswordHash` e `CreatedAt`. Após corrigir o repositório, o EF Core estará pronto para persistir usuários cadastrados.
-
----
+The `InitialCreate` migration creates the `Users` table with `Id`, `Username`, `Email`, `PasswordHash`, and `CreatedAt`. After fixing the repository, EF Core will be ready to persist registered users.
 
 ---
 
-## Contribuição
+---
 
-1. Faça fork do repositório.
-2. Crie uma branch para sua feature (`git checkout -b feature/minha-melhoria`).
-3. Commit suas alterações seguindo o padrão do projeto.
-4. Abra um Pull Request descrevendo mudanças e como testar (API + frontend + credenciais Google).
+## Contribution
+
+1. Fork the repository.
+2. Create a branch for your feature (`git checkout -b feature/minha-melhoria`).
+3. Commit your changes following the project standard.
+4. Open a Pull Request describing the changes and how to test (API + frontend + Google credentials).
 
 ---
 
-*Documentação gerada com base na análise do código-fonte, estrutura de pastas e dependências do repositório AuthApi.*
+*Documentation generated based on analysis of the AuthApi repository source code, folder structure, and dependencies.*
